@@ -1,0 +1,378 @@
+@font-face {
+  font-family: 'one';
+  src:  url('fonts/one.eot?4cogvg');
+  src:  url('fonts/one.eot?4cogvg#iefix') format('embedded-opentype'),
+    url('fonts/one.ttf?4cogvg') format('truetype'),
+    url('fonts/one.woff?4cogvg') format('woff'),
+    url('fonts/one.svg?4cogvg#one') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="one-"], [class*=" one-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'one' !important;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1;
+
+}
+.one-back1:before {
+  content: "\e975";
+}
+.one-file-edit2:before {
+  content: "\e974";
+}
+.one-template:before {
+  content: "\e973";
+}
+.one-lenxuong:before {
+  content: "\e969";
+}
+.one-quaydoc:before {
+  content: "\e96a";
+}
+.one-keotha:before {
+  content: "\e96b";
+}
+.one-naplai:before {
+  content: "\e96c";
+}
+.one-ongnhom:before {
+  content: "\e96d";
+}
+.one-arrow-circle-right:before {
+  content: "\e96e";
+}
+.one-arrow-circle-left:before {
+  content: "\e96f";
+}
+.one-file-half:before {
+  content: "\e970";
+}
+.one-zoom-100:before {
+  content: "\e971";
+}
+.one-quayngang:before {
+  content: "\e972";
+}
+.one-cab:before {
+  content: "\e967";
+}
+.one-appstore:before {
+  content: "\e968";
+}
+.one-xlsx-import:before {
+  content: "\e965";
+}
+.one-xlsx1:before {
+  content: "\e966";
+}
+.one-user-mess:before {
+  content: "\e964";
+
+}
+.one-lock-wifi:before {
+  content: "\e963";
+
+}
+.one-folder-back:before {
+  content: "\e962";
+}
+.one-view-result:before {
+  content: "\e960";
+}
+.one-file-plus-1:before {
+  content: "\e961";
+}
+.one-export:before {
+  content: "\e95f";
+}
+.one-excel-download:before {
+  content: "\e95e";
+}
+.one-alert:before {
+  content: "\e900";
+}
+.one-apartment:before {
+  content: "\e901";
+}
+.one-arrow-left-forward:before {
+  content: "\e902";
+}
+.one-arrow-right-forward:before {
+  content: "\e903";
+}
+.one-back:before {
+  content: "\e904";
+}
+.one-book:before {
+  content: "\e905";
+}
+.one-book1:before {
+  content: "\e906";
+}
+.one-calculator:before {
+  content: "\e907";
+}
+.one-calendar:before {
+  content: "\e908";
+}
+.one-calendar-sync:before {
+  content: "\e909";
+}
+.one-cancel:before {
+  content: "\e90a";
+}
+.one-cap:before {
+  content: "\e90b";
+}
+.one-change:before {
+  content: "\e90c";
+}
+.one-change-date:before {
+  content: "\e90d";
+}
+.one-circle-question:before {
+  content: "\e90e";
+}
+.one-clipart-1:before {
+  content: "\e90f";
+}
+.one-clipart-arrow-right:before {
+  content: "\e910";
+}
+.one-clipart-check:before {
+  content: "\e911";
+}
+.one-clipart-plus:before {
+  content: "\e912";
+}
+.one-connect:before {
+  content: "\e913";
+}
+.one-daunoi:before {
+  content: "\e914";
+}
+.one-design-per:before {
+  content: "\e915";
+}
+.one-download:before {
+  content: "\e916";
+}
+.one-drag:before {
+  content: "\e917";
+}
+.one-edit:before {
+  content: "\e918";
+}
+.one-excel:before {
+  content: "\e919";
+}
+.one-excel-outline:before {
+  content: "\e91a";
+}
+.one-file-arrow:before {
+  content: "\e91b";
+}
+.one-file-arrow-left:before {
+  content: "\e91c";
+}
+.one-file-arrow-right:before {
+  content: "\e91d";
+}
+.one-file-arrow-right1:before {
+  content: "\e91e";
+}
+.one-file-arrow-up:before {
+  content: "\e91f";
+}
+.one-file-attach:before {
+  content: "\e920";
+}
+.one-file-back:before {
+  content: "\e921";
+}
+.one-file-cancel:before {
+  content: "\e922";
+}
+.one-file-chart:before {
+  content: "\e923";
+}
+.one-file-check:before {
+  content: "\e924";
+}
+.one-file-check1:before {
+  content: "\e925";
+}
+.one-file-download:before {
+  content: "\e926";
+}
+.one-file-edit:before {
+  content: "\e927";
+}
+.one-file-history:before {
+  content: "\e928";
+}
+.one-file-lock:before {
+  content: "\e929";
+}
+.one-file-money:before {
+  content: "\e92a";
+}
+.one-file-plus:before {
+  content: "\e92b";
+}
+.one-file-search:before {
+  content: "\e92c";
+}
+.one-file-trash:before {
+  content: "\e92d";
+}
+.one-flag:before {
+  content: "\e92e";
+}
+.one-folder-arrow:before {
+  content: "\e92f";
+}
+.one-folder-arrow-back:before {
+  content: "\e930";
+}
+.one-folder-code:before {
+  content: "\e931";
+}
+.one-folder-received-fill:before {
+  content: "\e932";
+}
+.one-folder-sync:before {
+  content: "\e933";
+}
+.one-forward:before {
+  content: "\e934";
+}
+.one-hoancong:before {
+  content: "\e935";
+}
+.one-ip:before {
+  content: "\e936";
+}
+.one-key:before {
+  content: "\e937";
+}
+.one-keyboard:before {
+  content: "\e938";
+}
+.one-light-question:before {
+  content: "\e939";
+}
+.one-lstdcap:before {
+  content: "\e93a";
+}
+.one-mail-download:before {
+  content: "\e93b";
+}
+.one-map-search:before {
+  content: "\e93c";
+}
+.one-mobile-plus:before {
+  content: "\e93d";
+}
+.one-notepad:before {
+  content: "\e93e";
+}
+.one-pdf-download:before {
+  content: "\e93f";
+}
+.one-phone:before {
+  content: "\e940";
+}
+.one-phone-remove:before {
+  content: "\e941";
+}
+.one-print:before {
+  content: "\e942";
+}
+.one-ptcap:before {
+  content: "\e943";
+}
+.one-question-circle:before {
+  content: "\e944";
+}
+.one-refresh:before {
+  content: "\e945";
+}
+.one-reload:before {
+  content: "\e946";
+}
+.one-reload1:before {
+  content: "\e947";
+}
+.one-reload-back:before {
+  content: "\e948";
+}
+.one-reload-mobile:before {
+  content: "\e949";
+}
+.one-reload-next:before {
+  content: "\e94a";
+}
+.one-remember:before {
+  content: "\e94b";
+}
+.one-remove-outline:before {
+  content: "\e94c";
+}
+.one-reset:before {
+  content: "\e94d";
+}
+.one-save:before {
+  content: "\e94e";
+}
+.one-search:before {
+  content: "\e94f";
+}
+.one-seri:before {
+  content: "\e950";
+}
+.one-sign:before {
+  content: "\e951";
+}
+.one-sitemap-user:before {
+  content: "\e952";
+}
+.one-sort:before {
+  content: "\e953";
+}
+.one-sync:before {
+  content: "\e954";
+}
+.one-trash:before {
+  content: "\e955";
+}
+.one-upload:before {
+  content: "\e956";
+}
+.one-user-contact:before {
+  content: "\e957";
+}
+.one-user-location:before {
+  content: "\e958";
+}
+.one-view:before {
+  content: "\e959";
+}
+.one-wallet:before {
+  content: "\e95a";
+}
+.one-xlsx:before {
+  content: "\e95b";
+}
+.one-zoom-default:before {
+  content: "\e95c";
+}
+.one-zoom-fit-window:before {
+  content: "\e95d";
+}
