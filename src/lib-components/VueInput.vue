@@ -1,32 +1,38 @@
 <template>
-  <div class="info-row">
-    <div v-if="checkbox" :class="'key' + ' w' + (labelWidth ? labelWidth : '80')">
-      <div class="check-action">
-        <input v-model="checkbox_value" type="checkbox" class="check" />
+  <div class="input-container" :class="this.error.length > 0 ? 'error-input' : ''">
+    <div class="info-row">
+      <div v-if="checkbox" :class="'key' + ' w' + (labelWidth ? labelWidth : '80')">
+        <div class="check-action">
+          <input v-model="checkbox_value" type="checkbox" class="check" />
+          <span class="name">{{ label }}</span>
+          <span class="required" v-if="required">*</span>
+        </div>
+      </div>
+      <div :class="'key' + ' w' + (labelWidth ? labelWidth : '80')" v-else-if="radio">
+        <div class="check-action">
+          <input type="radio" class="check" />
+          <span class="name">{{ label }}</span>
+          <span class="required" v-if="required">*</span>
+        </div>
+      </div>
+      <div :class="'key' + ' w' + (labelWidth ? labelWidth : '80')" v-else>
         <span class="name">{{ label }}</span>
         <span class="required" v-if="required">*</span>
       </div>
-    </div>
-    <div :class="'key' + ' w' + (labelWidth ? labelWidth : '80')" v-else-if="radio">
-      <div class="check-action">
-        <input type="radio" class="check" />
-        <span class="name">{{ label }}</span>
-        <span class="required" v-if="required">*</span>
+      <div class="value">
+          <input
+            :disabled="disableInput"
+            v-model="current_value"
+            type="text"
+            class="form-control"
+            :class="highlight ? 'highlight' : ''"
+            v-on:keyup.enter="$emit('enter', $event.target.value)"
+          />
       </div>
     </div>
-    <div :class="'key' + ' w' + (labelWidth ? labelWidth : '80')" v-else>
-      <span class="name">{{ label }}</span>
-      <span class="required" v-if="required">*</span>
-    </div>
-    <div class="value">
-        <input
-          :disabled="disableInput"
-          v-model="current_value"
-          type="text"
-          class="form-control"
-          :class="highlight ? 'highlight' : ''"
-          v-on:keyup.enter="$emit('enter', $event.target.value)"
-        />
+    <div v-if="this.error.length > 0" class="error">
+        <div :class="'error-margin ' + ' w' + (labelWidth ? labelWidth : '80')"></div>
+        <span>{{err_message}}</span>
     </div>
   </div>
 </template>
@@ -34,6 +40,8 @@
 export default {
   data: () => ({
     checkbox_value: false,
+    error: [],
+    err_message: ''
   }),
   props: {
     label: String,
@@ -43,7 +51,8 @@ export default {
     labelWidth: String,
     required: Boolean,
     disable: Boolean,
-    highlight: Boolean
+    highlight: Boolean,
+    validate: Array
   },
   computed: {
     current_value: {
@@ -61,6 +70,41 @@ export default {
         return false;
       }
     }
+  },
+  methods: {
+    checkValidate() {
+      if(this.validate.length > 0) {
+        var err = []
+        this.error = []
+        this.validate.forEach(element => {
+          if(element === 'required') {
+            if(!this.current_value)
+              err.push('required')
+              this.err_message = this.label + ' không thể bỏ trống'
+          }
+          if(element.includes('min:')) {
+            let condit = element.split(':')
+            if(condit.length > 1) {
+              if(Number(this.current_value) < Number(condit[1])) {
+                err.push('min')
+                this.err_message = this.label + ' phải lớn hơn ' + Number(condit[1])
+              }
+            }
+          }
+          if(element.includes('max:')) {
+            let condit = element.split(':')
+            if(condit.length > 1) {
+              if(Number(this.current_value) > Number(condit[1])) {
+                this.compare.max = Number(condit[1])
+                err.push('max')
+                this.err_message = this.label + ' phải nhỏ hơn ' + Number(condit[1])
+              }
+            }
+          }
+        })
+        this.error = err
+      }
+    }
   }
 };
 </script>
@@ -72,4 +116,55 @@ export default {
 .required {
   color: red;
 }
+  .error {
+    display: block;
+    color: #f57f6c;
+    font-size: 12px;
+  }
+
+  .error-margin {
+    display: inline-block;
+  }
+
+  .error-input input {
+    border: 1px solid #f57f6c;
+    animation-name: bounce;
+    animation-duration: .5s;
+    animation-delay: 0.25s;
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: translateX(0px);
+      timing-function: ease-in;
+    }
+    37% {
+      transform: translateX(5px);
+      timing-function: ease-out;
+    }
+    55% {
+      transform: translateX(-5px);
+      timing-function: ease-in;
+    }
+    73% {
+      transform: translateX(4px);
+      timing-function: ease-out;
+    }
+    82% {
+      transform: translateX(-4px);
+      timing-function: ease-in;
+    }
+    91% {
+      transform: translateX(2px);
+      timing-function: ease-out;
+    }
+    96% {
+      transform: translateX(-2px);
+      timing-function: ease-in;
+    }
+    100% {
+      transform: translateX(0px);
+      timing-function: ease-in;
+    }
+  }
 </style>

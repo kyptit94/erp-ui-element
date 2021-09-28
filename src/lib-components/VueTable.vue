@@ -7,7 +7,11 @@
             <th class="w20"></th>
             <th class="w20" v-if="multiple === true">
               <div class="check-action">
-                  <input @change="filterCheckbox($event)" type="checkbox" class="check">
+                  <input
+                  v-bind:key="'page' + page"
+                  @click="checkAllItem($event)"
+                  type="checkbox"
+                  class="check">
                   <span class="name"></span>
               </div>
             </th>
@@ -17,7 +21,7 @@
             <th class="w20"></th>
             <th class="w20" v-if="multiple === true">
               <div class="check-action">
-                  <input type="checkbox" disabled="" class="check">
+                  <input @change="filterCheckbox($event)" type="checkbox" class="check">
                   <span class="name"></span>
               </div>
             </th>
@@ -31,17 +35,17 @@
         </thead>
         <tbody>
           <template v-if="!loading">
-          <tr v-bind:key="option[unique] ? (option[unique] + page) : ('col4' + j + page)" v-for="(option, j) in options_perpage" :class="current == option[unique] ? 'highlight' : ''">
-            <td @click="chooseItem(option[unique], option)" class="w20 center">
-              <span v-if="current == option[unique]" class="fa fa-play text-main"></span>
+          <tr v-bind:key="option[unique] ? (option[unique] + page) : ('col4' + j + page)" v-for="(option, j) in options_perpage" :class="compare(option, choose) ? 'highlight' : ''">
+            <td @click="chooseItem(option)" class="w20 center">
+              <span v-if="compare(option, choose)" class="fa fa-play text-main"></span>
             </td>
             <td class="w30 center" v-if="multiple === true">
               <div class="check-action">
-                  <input :checked="multiple_value ? multiple_value[option[unique]] : false" type="checkbox" @change="pushItem(option, option[unique])" class="check">
+                  <input :checked="multiple_value.includes(option)" type="checkbox" @change="pushItem(option)" class="check">
                   <span class="name"></span>
               </div>
             </td>
-            <td :class="item.align ? ('text-' + item.align) : ''" :style="item.width ? ('width: ' + item.width) : ''" @click="chooseItem(option[unique], option)" v-bind:key="'col3' + i" v-for="(item, i) in config">
+            <td :class="item.align ? ('text-' + item.align) : ''" :style="item.width ? ('width: ' + item.width) : ''" @click="chooseItem(option)" v-bind:key="'col3' + i" v-for="(item, i) in config">
               {{option[item.key]}}
             </td>
           </tr>
@@ -55,7 +59,7 @@
           </template>
         </tbody>
       </table>
-      <vue-paginate v-model="page" :per_page="10" :total="temp_options.length"></vue-paginate>
+      <vue-paginate v-model="page" :per_page="numPerPage" :total="temp_options.length"></vue-paginate>
     </div>
   </div>
 </template>
@@ -63,11 +67,9 @@
 export default {
   data: () => ({
     temp_options: [],
-    options_perpage: [],
     page: 1,
-    current: 0,
-    multiple_value: {},
-    current_value: {}
+    multiple_value: [],
+    choose: {}
   }),
   props: {
     value: [Object],
@@ -75,34 +77,43 @@ export default {
     config: Array,
     unique: String,
     loading: Boolean,
-    multiple: Boolean
+    multiple: Boolean,
+    perpage: [Number, String]
   },
-  created() {
-    this.current_value = this.value
+  computed: {
+    numPerPage() {
+      return this.perpage ? Number(this.perpage) : 10
+    },
+    options_perpage() {
+      return this.temp_options.slice((this.page - 1) * this.numPerPage, this.page * this.numPerPage)
+    },
+    current_value() {
+      let data      = this.choose
+      data.listItem = this.multiple_value 
+      return data
+    }
+  },
+  mounted() {
+    this.chooseItem(this.value)
+    this.multiple_value = this.value.listItem ? this.value.listItem : []
   },
   watch: {
     options: { 
       handler() {
         this.temp_options = this.options
-        this.multiple_value = {}
+        this.multiple_value = []
       },
       deep: true
     },
     temp_options: { 
       handler() {
         this.page = 1
-        this.getItem(this.page)
       },
       deep: true
     },
-    page (val) {
-      this.getItem(this.page)
-    },
     value: {
-      handler(val) {
-        this.current        = val[this.unique]
-        this.current_value  = val
-        this.multiple_value = val.listItem ? val.listItem : {}
+      handler() {
+        this.chooseItem(this.value)
       },
       deep: true
     }
@@ -116,6 +127,16 @@ export default {
       }
       this.page = 1
     },
+    checkAllItem(event) {
+      if(event.target.checked === true) {
+        this.options_perpage.forEach(item => {
+          this.multiple_value.push(item)
+        })
+      } else {
+        this.multiple_value = []
+      }
+      this.$emit('input', this.current_value)
+    },
     filterItem (event, key) {
       let text = event.target ? event.target.value : event
       text = text.toLowerCase()
@@ -127,24 +148,29 @@ export default {
       })
       this.getItem(this.page)
     },
-    getItem (page) {
-      this.options_perpage = this.temp_options.slice((page - 1) * 10, page * 10)
-    },
-    pushItem(option, index) {
+    pushItem(option) {
       if(this.multiple === true) {
-        if(!this.multiple_value[index])
-          this.multiple_value[index] = option
-        else
-          delete this.multiple_value[index]
-
-        this.current_value.listItem = this.multiple_value
+        this.multiple_value.push(option)
         this.$emit('input', this.current_value)
       }
     },
-    chooseItem(index, option) {
-      this.current = index
-      this.current_value = option
+    chooseItem(option) {
+      for(let i in option) {
+        if(i !== 'listItem') {
+          this.$set(this.choose, i, option[i])
+        }
+      }
       this.$emit('input', this.current_value)
+    },
+    compare(a,b) {
+      for(let i in a) {
+        if(i !== 'listItem') {
+          if(a[i] != b[i]) {
+            return false
+          } 
+        }
+      }
+      return true
     }
   }
 }
