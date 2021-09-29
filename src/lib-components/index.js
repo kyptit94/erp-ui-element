@@ -11,6 +11,8 @@ import VueSelect from './VueSelect.vue'
 import VueTextarea from './VueTextarea.vue'
 import VueRadio from './VueRadio.vue'
 import VueBreadcrumb from './VueBreadcrumb.vue'
+import VueTreeItem from './VueTreeItem.vue'
+import VueTree from './VueTree.vue'
 import Vue from 'vue'
 
 let components = {
@@ -25,7 +27,9 @@ let components = {
     'vue-textarea': VueTextarea,
     'vue-radio': VueRadio,
     'vue-table-group': VueTableGroup,
-    'vue-bread-crumb' : VueBreadcrumb
+    'vue-bread-crumb' : VueBreadcrumb,
+    'vue-tree-item' : VueTreeItem,
+    'vue-tree' :  VueTree
 
 }
 

@@ -95,7 +95,7 @@ export default {
   },
   mounted() {
     this.chooseItem(this.value)
-    this.multiple_value = this.value.listItem ? this.value.listItem : []
+    this.multiple_value = (this.value && this.value.listItem) ? this.value.listItem : []
   },
   watch: {
     options: { 

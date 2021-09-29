@@ -19,7 +19,7 @@
         </thead>
         <tbody>
           <template v-if="!loading">
-            <template v-for="(groupItem, gj) in reOptions()" >
+            <template v-for="(groupItem, gj) in options_perpage" >
               <tr class="fw6 tree-open" v-bind:key="'gr4' + gj">
                 <td :colspan="config.length + 1">
                     <div class="tree-arrow"></div> {{groupItem.label}}
@@ -49,13 +49,11 @@
   </div>
 </template>
 <script>
-import VuePaginate from './VuePaginate.vue'
 export default {
   data: () => ({
-    temp_options: [],
-    options_perpage: [],
     page: 1,
     current: 0,
+    temp_options: []
   }),
   props: {
     value: Object,
@@ -64,30 +62,29 @@ export default {
     unique: String,
     loading: Boolean,
     groupField: String,
-    groupLabel: String
+    groupLabel: String,
+    perpage: Number
   },
-  components: {
-    VuePaginate
-  },
-  computed: {
-    options_length () {
-      if(this.options)
-        return this.options.length
-      return 0;
-    }
+  mounted() {
+    this.temp_options = this.options
   },
   watch: {
-    options_length (val) {
-      this.temp_options = this.options
-      this.page = 1
-      this.getItem(this.page)
-    },
-    page (val) {
-      this.getItem(this.page)
+    options: {
+      handler(val) {
+        this.temp_options = val
+      },
+      deep: true
     }
   },
-  created() {
-    this.reOptions()
+  computed: {
+    numPerPage() {
+      return this.perpage ? this.perpage : 10
+    },
+    options_perpage() {
+      var data = this.temp_options.slice((this.page - 1) * this.numPerPage, this.page * this.numPerPage)
+      console.log(this.temp_options)
+      return this.reOptions(data)
+    },
   },
   methods: {
     filterItem (event, key) {
@@ -99,18 +96,14 @@ export default {
           return option[key].toLowerCase().includes(text)
         }
       })
-      this.getItem(this.page)
-    },
-    getItem (page) {
-      this.options_perpage = this.temp_options.slice((page - 1) * 10, page * 10)
     },
     chooseItem(index, option) {
       this.current = index
       this.$emit('input', option)
     },
-    reOptions() {
+    reOptions(data) {
       var reOptions = {}
-      this.options.forEach(item => {
+      data.forEach(item => {
         if(item[this.groupField]) {
           if(!reOptions[item[this.groupField]]) {
             reOptions[item[this.groupField]] = {
