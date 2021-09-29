@@ -17,9 +17,6 @@ export default {
     options: Array,
     labelField: String,
     valueField: String
-  },
-  components: {
-    VueTreeItem
   }
 }
 </script>
