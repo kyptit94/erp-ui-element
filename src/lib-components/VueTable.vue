@@ -15,6 +15,9 @@
                   <span class="name"></span>
               </div>
             </th>
+            <th v-if="stt">
+              Stt
+            </th>
             <th v-bind:key="'col1' + i" v-for="(item, i) in config">{{item.label}}</th>
           </tr>
           <tr>
@@ -25,6 +28,7 @@
                   <span class="name"></span>
               </div>
             </th>
+            <th v-if="stt"></th>
             <th :style="item.width ? ('width: ' + item.width) : ''" v-bind:key="'col2' + i" v-for="(item, i) in config">
               <div v-if="item.filterAble" class="input-icon-right">
                 <input @input="filterItem($event, item.key)" type="text" class="form-control" />
@@ -44,6 +48,9 @@
                   <input :checked="multiple_value.includes(option)" type="checkbox" @change="pushItem(option)" class="check">
                   <span class="name"></span>
               </div>
+            </td>
+            <td v-if="stt">
+              {{options.indexOf(option) + 1}}
             </td>
             <td :class="item.align ? ('text-' + item.align) : ''" :style="item.width ? ('width: ' + item.width) : ''" @click="chooseItem(option)" v-bind:key="'col3' + i" v-for="(item, i) in config">
               {{option ? option[item.key] : ''}}
@@ -78,7 +85,8 @@ export default {
     unique: String,
     loading: Boolean,
     multiple: Boolean,
-    perpage: [Number, String]
+    perpage: [Number, String],
+    stt: Boolean
   },
   computed: {
     numPerPage() {
