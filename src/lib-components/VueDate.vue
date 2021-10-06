@@ -1,29 +1,31 @@
 <template>
   <div class="input-container" :class="this.error.length > 0 ? 'error-input' : ''">
     <div class="info-row">
-      <template v-if="checkbox">
-        <div :class="'key' + ' w' + labelWidth">
-          <div class="label-checkbox">
-            <span class="name">{{ label }}
-            </span>
-            <span v-if="required" class="required">*</span>
+      <template v-if="label">
+        <template v-if="checkbox">
+          <div :class="'key' + ' w' + labelWidth">
+            <div class="label-checkbox">
+              <span class="name">{{ label }}
+              </span>
+              <span v-if="required" class="required">*</span>
+            </div>
           </div>
-        </div>
-        <div class="value w20 padt7">
-          <div class="check-action">
-            <input v-model="checkbox_value" type="checkbox" class="check" />
-            <span class="name"></span>
+          <div class="value w20 padt7">
+            <div class="check-action">
+              <input v-model="checkbox_value" type="checkbox" class="check" />
+              <span class="name"></span>
+            </div>
           </div>
-        </div>
+        </template>
+        <div v-else :class="'key' + ' w' + labelWidth">{{ label }} <span v-if="required" class="required">*</span></div>
       </template>
-      <div v-else :class="'key' + ' w' + labelWidth">{{ label }} <span v-if="required" class="required">*</span></div>
       <div class="value">
-          <date-picker 
-          :format="dateFormat" 
-          :value-type="dateFormat" 
-          :append-to-body="true"  
-          :time-title-format="dateFormat" 
-          v-model="time" 
+          <date-picker
+          :format="dateFormat"
+          :value-type="dateFormat"
+          :append-to-body="true"
+          :time-title-format="dateFormat"
+          v-model="time"
           :disabled="disable_value"
           :type="typeFormat">
             <template #icon-calendar>
