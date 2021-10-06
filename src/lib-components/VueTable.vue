@@ -72,7 +72,7 @@ export default {
     choose: {}
   }),
   props: {
-    value: [Object],
+    value: [Object, Array],
     options: Array,
     config: Array,
     unique: String,
@@ -88,15 +88,18 @@ export default {
       return this.temp_options.slice((this.page - 1) * this.numPerPage, this.page * this.numPerPage)
     },
     current_value() {
-      let data      = this.choose
-      data.listItem = this.multiple_value
-      return data
+      if(this.multiple)
+        return this.multiple_value
+      else
+        return this.choose
     }
   },
   mounted() {
-    this.chooseItem(this.value)
+    if(this.multiple)
+      this.multiple_value = (this.value) ? this.value : []
+    else
+      this.chooseItem(this.value)
     this.temp_options = this.options
-    this.multiple_value = (this.value && this.value.listItem) ? this.value.listItem : []
   },
   watch: {
     options: {
@@ -114,7 +117,10 @@ export default {
     },
     value: {
       handler() {
-        this.chooseItem(this.value)
+        if(this.multiple)
+          this.multiple_value = (this.value) ? this.value : []
+        else
+          this.chooseItem(this.value)
       },
       deep: true
     }
@@ -131,7 +137,9 @@ export default {
     checkAllItem(event) {
       if(event.target.checked === true) {
         this.options_perpage.forEach(item => {
-          this.multiple_value.push(item)
+          let index = this.multiple_value.indexOf(item)
+          if (index < 0)
+            this.multiple_value.push(item)
         })
       } else {
         this.multiple_value = []
@@ -144,7 +152,7 @@ export default {
       this.page = 1
       this.temp_options = this.options.filter(option => {
         if (option[key]) {
-          return String(option[key]).toLowerCase().includes(text)
+          return String(option[key]).toLowerCase().includes(text.trim())
         }
       })
     },
