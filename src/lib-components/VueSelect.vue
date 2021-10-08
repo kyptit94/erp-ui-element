@@ -118,6 +118,10 @@ export default {
 }
 </script>
 <style scoped>
+  .check-action {
+    display: flex;
+    align-items: center;
+  }
   .select_option {
     max-height: 300px;
     height: fit-content;
