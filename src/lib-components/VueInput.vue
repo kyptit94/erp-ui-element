@@ -81,7 +81,7 @@ export default {
         this.error = []
         this.validate.forEach(element => {
           if(element === 'required') {
-            if(this.current_value == "")
+            if(this.current_value == "" || this.current_value == null)
               err.push('required')
               this.err_message = this.label + ' không thể bỏ trống'
           }
