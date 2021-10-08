@@ -25,9 +25,9 @@
                     <div class="tree-arrow"></div> {{groupItem.label}}
                 </td>
               </tr>
-              <tr v-bind:key="'col4' + j + gj" v-for="(option, j) in groupItem.data" @click="chooseItem(option[unique], option)" :class="current == option[unique] ? 'highlight' : ''">
+              <tr v-bind:key="'col4' + j + gj" v-for="(option, j) in groupItem.data" @click="chooseItem(option[unique], option)" :class="compare(option,value) ? 'highlight' : ''">
                 <td class="w20 center">
-                  <span v-if="current == option[unique]" class="fa fa-play text-main"></span>
+                  <span v-if="compare(option,value)" class="fa fa-play text-main"></span>
                 </td>
                 <td v-bind:key="'col3' + i" v-for="(item, i) in config">
                   {{option[item.key]}}
@@ -82,7 +82,6 @@ export default {
     },
     options_perpage() {
       var data = this.temp_options.slice((this.page - 1) * this.numPerPage, this.page * this.numPerPage)
-      console.log(this.temp_options)
       return this.reOptions(data)
     },
   },
@@ -118,6 +117,20 @@ export default {
       })
 
       return reOptions
+    },
+    compare(a,b) {
+      for(let i in a) {
+        if(i !== 'listItem') {
+          if(!b) {
+            return false
+          } else {
+            if(a[i] != b[i]) {
+              return false
+            }
+          }
+        }
+      }
+      return true
     }
   }
 }

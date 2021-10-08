@@ -1,29 +1,32 @@
 <template>
   <div class="input-container" :class="this.error.length > 0 ? 'error-input' : ''">
     <div class="info-row">
-      <div v-if="checkbox" :class="'key' + ' w' + (labelWidth ? labelWidth : '80')">
-        <div class="check-action">
-          <input v-model="checkbox_value" type="checkbox" class="check" />
+      <template v-if="label">
+        <div v-if="checkbox" :class="'key' + ' w' + (labelWidth ? labelWidth : '80')">
+          <div class="check-action">
+            <input v-model="checkbox_value" type="checkbox" class="check" />
+            <span class="name">{{ label }}</span>
+            <span class="required" v-if="required">*</span>
+          </div>
+        </div>
+        <div :class="'key' + ' w' + (labelWidth ? labelWidth : '80')" v-else-if="radio">
+          <div class="check-action">
+            <input type="radio" class="check" />
+            <span class="name">{{ label }}</span>
+            <span class="required" v-if="required">*</span>
+          </div>
+        </div>
+        <div :class="'key' + ' w' + (labelWidth ? labelWidth : '80')" v-else>
           <span class="name">{{ label }}</span>
           <span class="required" v-if="required">*</span>
         </div>
-      </div>
-      <div :class="'key' + ' w' + (labelWidth ? labelWidth : '80')" v-else-if="radio">
-        <div class="check-action">
-          <input type="radio" class="check" />
-          <span class="name">{{ label }}</span>
-          <span class="required" v-if="required">*</span>
-        </div>
-      </div>
-      <div :class="'key' + ' w' + (labelWidth ? labelWidth : '80')" v-else>
-        <span class="name">{{ label }}</span>
-        <span class="required" v-if="required">*</span>
-      </div>
+      </template>
       <div class="value">
           <input
             :disabled="disableInput"
             v-model="current_value"
             type="text"
+            @keyup="checkValidate()"
             class="form-control"
             :class="highlight ? 'highlight' : ''"
             v-on:keyup.enter="$emit('enter', $event.target.value)"
@@ -109,7 +112,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.check-action {
+  display: flex;
+  align-items: center;
+}
 .key {
   white-space: nowrap;
 }

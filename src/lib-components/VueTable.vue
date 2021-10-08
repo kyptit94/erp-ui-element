@@ -15,6 +15,9 @@
                   <span class="name"></span>
               </div>
             </th>
+            <th v-if="stt">
+              Stt
+            </th>
             <th v-bind:key="'col1' + i" v-for="(item, i) in config">{{item.label}}</th>
           </tr>
           <tr>
@@ -25,6 +28,7 @@
                   <span class="name"></span>
               </div>
             </th>
+            <th v-if="stt"></th>
             <th :style="item.width ? ('width: ' + item.width) : ''" v-bind:key="'col2' + i" v-for="(item, i) in config">
               <div v-if="item.filterAble" class="input-icon-right">
                 <input @input="filterItem($event, item.key)" type="text" class="form-control" />
@@ -35,7 +39,7 @@
         </thead>
         <tbody>
           <template v-if="!loading">
-          <tr v-bind:key="option[unique] ? (option[unique] + page) : ('col4' + j + page)" v-for="(option, j) in options_perpage" :class="compare(option, choose) ? 'highlight' : ''">
+          <tr v-bind:key="(option && option[unique]) ? (option[unique] + page) : ('col4' + j + page)" v-for="(option, j) in options_perpage" :class="compare(option, choose) ? 'highlight' : ''">
             <td @click="chooseItem(option)" class="w20 center">
               <span v-if="compare(option, choose)" class="fa fa-play text-main"></span>
             </td>
@@ -45,8 +49,11 @@
                   <span class="name"></span>
               </div>
             </td>
+            <td v-if="stt">
+              {{options.indexOf(option) + 1}}
+            </td>
             <td :class="item.align ? ('text-' + item.align) : ''" :style="item.width ? ('width: ' + item.width) : ''" @click="chooseItem(option)" v-bind:key="'col3' + i" v-for="(item, i) in config">
-              {{option[item.key]}}
+              {{option ? option[item.key] : ''}}
             </td>
           </tr>
           </template>
@@ -72,13 +79,14 @@ export default {
     choose: {}
   }),
   props: {
-    value: [Object],
+    value: [Object, Array],
     options: Array,
     config: Array,
     unique: String,
     loading: Boolean,
     multiple: Boolean,
-    perpage: [Number, String]
+    perpage: [Number, String],
+    stt: Boolean
   },
   computed: {
     numPerPage() {
@@ -88,24 +96,28 @@ export default {
       return this.temp_options.slice((this.page - 1) * this.numPerPage, this.page * this.numPerPage)
     },
     current_value() {
-      let data      = this.choose
-      data.listItem = this.multiple_value 
-      return data
+      if(this.multiple)
+        return this.multiple_value
+      else
+        return this.choose
     }
   },
   mounted() {
-    this.chooseItem(this.value)
-    this.multiple_value = (this.value && this.value.listItem) ? this.value.listItem : []
+    if(this.multiple)
+      this.multiple_value = (this.value) ? this.value : []
+    else
+      this.chooseItem(this.value)
+    this.temp_options = this.options
   },
   watch: {
-    options: { 
+    options: {
       handler() {
         this.temp_options = this.options
         this.multiple_value = []
       },
       deep: true
     },
-    temp_options: { 
+    temp_options: {
       handler() {
         this.page = 1
       },
@@ -113,7 +125,10 @@ export default {
     },
     value: {
       handler() {
-        this.chooseItem(this.value)
+        if(this.multiple)
+          this.multiple_value = (this.value) ? this.value : []
+        else
+          this.chooseItem(this.value)
       },
       deep: true
     }
@@ -130,7 +145,9 @@ export default {
     checkAllItem(event) {
       if(event.target.checked === true) {
         this.options_perpage.forEach(item => {
-          this.multiple_value.push(item)
+          let index = this.multiple_value.indexOf(item)
+          if (index < 0)
+            this.multiple_value.push(item)
         })
       } else {
         this.multiple_value = []
@@ -143,14 +160,18 @@ export default {
       this.page = 1
       this.temp_options = this.options.filter(option => {
         if (option[key]) {
-          return option[key].toLowerCase().includes(text)
+          return String(option[key]).toLowerCase().includes(text.trim())
         }
       })
-      this.getItem(this.page)
     },
     pushItem(option) {
       if(this.multiple === true) {
-        this.multiple_value.push(option)
+        let index = this.multiple_value.indexOf(option)
+        if (index > -1) {
+          this.multiple_value.splice(index, 1)
+        } else {
+          this.multiple_value.push(option)
+        }
         this.$emit('input', this.current_value)
       }
     },
@@ -165,9 +186,13 @@ export default {
     compare(a,b) {
       for(let i in a) {
         if(i !== 'listItem') {
-          if(a[i] != b[i]) {
+          if(!b) {
             return false
-          } 
+          } else {
+            if(a[i] != b[i]) {
+              return false
+            }
+          }
         }
       }
       return true
