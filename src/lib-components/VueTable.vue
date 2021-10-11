@@ -176,11 +176,7 @@ export default {
       }
     },
     chooseItem(option) {
-      for(let i in option) {
-        if(i !== 'listItem') {
-          this.$set(this.choose, i, option[i])
-        }
-      }
+      this.choose = option ? option : {}
       this.$emit('input', this.current_value)
     },
     compare(a,b) {

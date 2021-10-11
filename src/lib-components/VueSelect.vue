@@ -1,28 +1,34 @@
 <template>
-  <div class="info-row">
-    <div v-if="checkbox" :class="'key' + ' w' + (labelWidth ? labelWidth : '80')">
-      <div class="check-action">
-        <input v-model="checkbox_value" type="checkbox" class="check" />
-        <span class="name">{{ label }}</span>
-        <span v-if="required" class="required">*</span>
-      </div>
-    </div>
-    <div v-else :class="'key' + ' w' + (labelWidth ? labelWidth : '80')">
-      {{ label }}
-      <span v-if="required" class="required">*</span>
-    </div>
-    <div class="value">
-      <div @click="showOption" class="select-custom">
-        <input :disabled="disableBox" @input="searchItem" v-model="search_value" class="form-control" :placeholder="current_label" :list="id" :name="id" autocomplete="off">
-        <div v-if="show_option && !disable" class="select_option" :id="id">
-          <div class="select_option_item" v-bind:key="i"
-            v-for="(item, i) in temp_options"
-            @click="chooseItem(item)"
-            :value="item[valueField]">{{item[labelField]}}</div>
+  <div class="input-container" :class="this.error.length > 0 ? 'error-input' : ''">
+    <div class="info-row">
+      <div v-if="checkbox" :class="'key' + ' w' + (labelWidth ? labelWidth : '80')">
+        <div class="check-action">
+          <input v-model="checkbox_value" type="checkbox" class="check" />
+          <span class="name">{{ label }}</span>
+          <span v-if="required" class="required">*</span>
         </div>
       </div>
+      <div v-else :class="'key' + ' w' + (labelWidth ? labelWidth : '80')">
+        {{ label }}
+        <span v-if="required" class="required">*</span>
+      </div>
+      <div class="value">
+        <div @click="showOption" class="select-custom">
+          <input :disabled="disableBox" @input="searchItem" v-model="search_value" class="form-control" :placeholder="current_label" :list="id" :name="id" autocomplete="off">
+          <div v-if="show_option && !disable" class="select_option" :id="id">
+            <div class="select_option_item" v-bind:key="i"
+              v-for="(item, i) in temp_options"
+              @click="chooseItem(item)"
+              :value="item[valueField]">{{item[labelField]}}</div>
+          </div>
+        </div>
+      </div>
+      <div v-if="show_option" class="outside" v-on:click="away()"></div>
     </div>
-    <div v-if="show_option" class="outside" v-on:click="away()"></div>
+    <div v-if="this.error.length > 0" class="error">
+        <div :class="'error-margin ' + ' w' + (labelWidth ? labelWidth : '80')"></div>
+        <span>{{err_message}}</span>
+    </div>
   </div>
 </template>
 <script>
@@ -31,7 +37,9 @@ export default {
     show_option: false,
     search_value: '',
     temp_options: [],
-    checkbox_value: false
+    checkbox_value: false,
+    error: [],
+    err_message: ''
   }),
   props: {
     label: String,
@@ -43,7 +51,8 @@ export default {
     id: String,
     labelWidth: String,
     disable: Boolean,
-    required: Boolean
+    required: Boolean,
+    validate: Array
   },
   computed: {
     disableBox () {
@@ -83,6 +92,9 @@ export default {
         this.temp_options = this.options
       },
       deep: true
+    },
+    value() {
+      this.checkValidate()
     }
   },
   methods: {
@@ -106,6 +118,21 @@ export default {
         this.temp_options = this.options
       }
     },
+    checkValidate() {
+      if(this.validate) {
+        var err = []
+        this.error = []
+        this.validate.forEach(element => {
+          if(element === 'required') {
+            if(this.value == "" || this.value == null) {
+              err.push('required')
+              this.err_message = this.label + ' không thể bỏ trống'
+            }
+          }
+        })
+        this.error = err
+      }
+    },
     showOption () {
       if (!this.disableBox) {
         this.show_option = !this.show_option
@@ -118,6 +145,57 @@ export default {
 }
 </script>
 <style scoped>
+.error {
+    display: block;
+    color: #f57f6c;
+    font-size: 12px;
+  }
+
+  .error-margin {
+    display: inline-block;
+  }
+
+  .error-input input {
+    border: 1px solid #f57f6c;
+    animation-name: bounce;
+    animation-duration: .5s;
+    animation-delay: 0.25s;
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: translateX(0px);
+      timing-function: ease-in;
+    }
+    37% {
+      transform: translateX(5px);
+      timing-function: ease-out;
+    }
+    55% {
+      transform: translateX(-5px);
+      timing-function: ease-in;
+    }
+    73% {
+      transform: translateX(4px);
+      timing-function: ease-out;
+    }
+    82% {
+      transform: translateX(-4px);
+      timing-function: ease-in;
+    }
+    91% {
+      transform: translateX(2px);
+      timing-function: ease-out;
+    }
+    96% {
+      transform: translateX(-2px);
+      timing-function: ease-in;
+    }
+    100% {
+      transform: translateX(0px);
+      timing-function: ease-in;
+    }
+  }
   .check-action {
     display: flex;
     align-items: center;
