@@ -145,7 +145,7 @@ export default {
     },
     checkAllItem(event) {
       if(event.target.checked === true) {
-        this.options_perpage.forEach(item => {
+        this.options.forEach(item => {
           let index = this.multiple_value.indexOf(item)
           if (index < 0)
             this.multiple_value.push(item)
