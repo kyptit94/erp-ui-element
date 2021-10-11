@@ -11,6 +11,7 @@
                   v-bind:key="'page' + page"
                   @click="checkAllItem($event)"
                   type="checkbox"
+                  :checked="isCheckAll"
                   class="check">
                   <span class="name"></span>
               </div>
@@ -86,7 +87,8 @@ export default {
     loading: Boolean,
     multiple: Boolean,
     perpage: [Number, String],
-    stt: Boolean
+    stt: Boolean,
+    isCheckAll: Boolean
   },
   computed: {
     numPerPage() {
