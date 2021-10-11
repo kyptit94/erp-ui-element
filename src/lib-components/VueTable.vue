@@ -8,7 +8,6 @@
             <th class="w20" v-if="multiple === true">
               <div class="check-action">
                   <input
-                  v-bind:key="'page' + page"
                   @click="checkAllItem($event)"
                   type="checkbox"
                   :checked="isCheckAll"
