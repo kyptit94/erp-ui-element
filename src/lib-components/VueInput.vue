@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     checkValidate() {
-      if(this.validate.length > 0) {
+      if(this.validate) {
         var err = []
         this.error = []
         this.validate.forEach(element => {
