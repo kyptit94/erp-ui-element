@@ -5,7 +5,7 @@ Thêm 2 dòng sau vào file main.js
 import 'vue2-datepicker/index.css'  
 require('erp-ui-element')  
 (lưu ý: Nếu trong file main.js đã import file register.js cũ thì bỏ đi)  
-
+update erp-ui-element@1.0.47
 
 ### Documents :  
 
