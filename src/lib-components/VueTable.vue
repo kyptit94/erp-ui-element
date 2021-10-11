@@ -154,6 +154,7 @@ export default {
         this.multiple_value = []
       }
       this.$emit('input', this.current_value)
+      this.$emit('update:isCheckAll', event.target.checked)
     },
     filterItem (event, key) {
       let text = event.target ? event.target.value : event
