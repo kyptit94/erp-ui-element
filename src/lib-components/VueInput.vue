@@ -26,6 +26,7 @@
             :disabled="disableInput"
             v-model="current_value"
             type="text"
+            @keyup="checkValidate()"
             class="form-control"
             :class="highlight ? 'highlight' : ''"
             v-on:keyup.enter="$emit('enter', $event.target.value)"
@@ -75,12 +76,12 @@ export default {
   },
   methods: {
     checkValidate() {
-      if(this.validate.length > 0) {
+      if(this.validate) {
         var err = []
         this.error = []
         this.validate.forEach(element => {
           if(element === 'required') {
-            if(!this.current_value)
+            if(this.current_value == "" || this.current_value == null)
               err.push('required')
               this.err_message = this.label + ' không thể bỏ trống'
           }
@@ -111,7 +112,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.check-action {
+  display: flex;
+  align-items: center;
+}
 .key {
   white-space: nowrap;
 }

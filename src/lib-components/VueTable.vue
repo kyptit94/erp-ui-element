@@ -8,9 +8,9 @@
             <th class="w20" v-if="multiple === true">
               <div class="check-action">
                   <input
-                  v-bind:key="'page' + page"
                   @click="checkAllItem($event)"
                   type="checkbox"
+                  :checked="isCheckAll"
                   class="check">
                   <span class="name"></span>
               </div>
@@ -86,7 +86,8 @@ export default {
     loading: Boolean,
     multiple: Boolean,
     perpage: [Number, String],
-    stt: Boolean
+    stt: Boolean,
+    isCheckAll: Boolean
   },
   computed: {
     numPerPage() {
@@ -144,7 +145,7 @@ export default {
     },
     checkAllItem(event) {
       if(event.target.checked === true) {
-        this.options_perpage.forEach(item => {
+        this.options.forEach(item => {
           let index = this.multiple_value.indexOf(item)
           if (index < 0)
             this.multiple_value.push(item)
@@ -153,6 +154,7 @@ export default {
         this.multiple_value = []
       }
       this.$emit('input', this.current_value)
+      this.$emit('update:isCheckAll', event.target.checked)
     },
     filterItem (event, key) {
       let text = event.target ? event.target.value : event
@@ -176,11 +178,7 @@ export default {
       }
     },
     chooseItem(option) {
-      for(let i in option) {
-        if(i !== 'listItem') {
-          this.$set(this.choose, i, option[i])
-        }
-      }
+      this.choose = option ? option : {}
       this.$emit('input', this.current_value)
     },
     compare(a,b) {
